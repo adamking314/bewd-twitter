@@ -1,35 +1,24 @@
-require 'rails_helper'
+Rails.application.routes.draw do
+  # Root path
+  root to: 'homepage#index'
 
-RSpec.describe 'Route definition', :type => :routing do
-  it 'of POST /users' do
-    expect(:post => '/users').to route_to(:controller => 'users', :action => 'create')
-  end
+  # Feeds route
+  get '/feeds', to: 'feeds#index'
 
-  it 'of POST /sessions' do
-    expect(:post => '/sessions').to route_to(:controller => 'sessions', :action => 'create')
-  end
+  # User-related routes
+  post '/users', to: 'users#create'
 
-  it 'of GET /authenticated' do
-    expect(:get => '/authenticated').to route_to(:controller => 'sessions', :action => 'authenticated')
-  end
+  # Session-related routes
+  post '/sessions', to: 'sessions#create'
+  delete '/sessions', to: 'sessions#destroy'
+  get '/authenticated', to: 'sessions#authenticated'
 
-  it 'of DELETE /sessions' do
-    expect(:delete => '/sessions').to route_to(:controller => 'sessions', :action => 'destroy')
-  end
+  # Tweet-related routes
+  post '/tweets', to: 'tweets#create'
+  get '/tweets', to: 'tweets#index'
+  delete '/tweets/:id', to: 'tweets#destroy', as: 'delete_tweet'
+  get '/users/:username/tweets', to: 'tweets#index_by_user', as: 'user_tweets'
 
-  it 'of POST /tweets' do
-    expect(:post => '/tweets').to route_to(:controller => 'tweets', :action => 'create')
-  end
-
-  it 'of GET /tweets' do
-    expect(:get => '/tweets').to route_to(:controller => 'tweets', :action => 'index')
-  end
-
-  it 'of DELETE /tweets/:id' do
-    expect(:delete => '/tweets/:id').to route_to(:controller => 'tweets', :action => 'destroy', :id => ':id')
-  end
-
-  it 'of GET /users/:username/tweets' do
-    expect(:get => '/users/:username/tweets').to route_to(:controller => 'tweets', :action => 'index_by_user', :username => ':username')
-  end
+  # Wildcard route for client-side routing
+  get '/*path', to: 'homepage#index'
 end
